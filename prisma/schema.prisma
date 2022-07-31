@@ -11,18 +11,22 @@ datasource db {
 }
 
 model User {
-  userID   Int     @id @default(autoincrement())
-  nickName String  @unique
-  avatar   String?
-  Video        Video? @relation(fields: [videoVideoID], references: [videoID])
-  videoVideoID Int?
+  userID    String   @id @default(uuid())
+  nickName  String   @unique
+  avatar    String?
+  password  String   @unique
+  email     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Video        Video?  @relation(fields: [videoVideoID], references: [videoID])
+  videoVideoID String?
 }
 
 model Video {
-  videoID     Int     @id @default(autoincrement())
-  videoName   String  @unique
+  videoID     String   @id @default(uuid())
+  videoName   String   @unique
   Description String?
   url         String
-  user        User[]
-  userUserID  Int?
+  author        User[]
+  createdAt   DateTime @default(now())
 }
