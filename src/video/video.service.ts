@@ -1,13 +1,19 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from "@nestjs/common";
-import { Video } from "@prisma/client";
+import { Prisma, Video } from "@prisma/client";
 import { find } from "rxjs";
 import { FileService, fileType } from "src/file/file.service";
 import { PrismaService } from "src/prisma.service";
 import { isRegExp } from "util/types";
 import { CreateVideoDto } from "./dto/create-video.dto";
 
-
+type GetVideosParams = {
+    skip?: number;
+    take?: number;
+    cursor?: Prisma.VideoWhereUniqueInput;
+    where?: Prisma.VideoWhereInput;
+    orderBy?: Prisma.VideoOrderByWithRelationInput;
+};
 @Injectable()
 
 export class VideoService {
@@ -41,7 +47,7 @@ export class VideoService {
 
 
     }
-    async search(scan: string): Promise<Video[]> {
+    async search(scan: GetVideosParams): Promise<Video[]> {
         const videos = await this.prismaService.video.findMany(scan)
         return videos;
     }

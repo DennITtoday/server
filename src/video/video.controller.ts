@@ -4,6 +4,7 @@ import { FileFieldsInterceptor } from "@nestjs/platform-express";
 import { scan } from "rxjs";
 import { CreateVideoDto } from "./dto/create-video.dto";
 import { VideoService } from "./video.service";
+import { Video as VideoModel } from '@prisma/client';
 
 @Controller('/videos')
 export class VideoController {
@@ -21,9 +22,19 @@ export class VideoController {
         return this.videoService.create(dto, picture[0], Video[0]);
 
     }
-    @Get('/search')
-    getAll(@Query('scan') scan: string) {
-        return this.videoService.search(scan)
+    @Get('/search/:searchString')
+    async getFilteredVideos(
+        @Param('searchString') searchString: string,
+    ): Promise<VideoModel[]> {
+        return this.videoService.search({
+            where: {
+                OR: [
+                    {
+                        videoName: { contains: searchString },
+                    },
+                ],
+            },
+        });
     }
 
     @Get()
