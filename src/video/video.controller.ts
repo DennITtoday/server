@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Delete, Get, Param, Post, UploadedFiles, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Query, UploadedFiles, UseInterceptors } from "@nestjs/common";
 import { FileFieldsInterceptor } from "@nestjs/platform-express";
+import { scan } from "rxjs";
 import { CreateVideoDto } from "./dto/create-video.dto";
 import { VideoService } from "./video.service";
 
@@ -20,9 +21,15 @@ export class VideoController {
         return this.videoService.create(dto, picture[0], Video[0]);
 
     }
+    @Get('/search')
+    getAll(@Query('scan') scan: string) {
+        return this.videoService.search(scan)
+    }
+
     @Get()
-    getAll() {
-        return this.videoService.getAll()
+    search(@Query('count') count: number,
+        @Query('offset') offset: number) {
+        return this.videoService.getAll(count, offset)
     }
     @Get(':videoID')
     getOne(@Param('videoID') videoID: string) {

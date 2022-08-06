@@ -1,8 +1,10 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from "@nestjs/common";
 import { Video } from "@prisma/client";
+import { find } from "rxjs";
 import { FileService, fileType } from "src/file/file.service";
 import { PrismaService } from "src/prisma.service";
+import { isRegExp } from "util/types";
 import { CreateVideoDto } from "./dto/create-video.dto";
 
 
@@ -22,10 +24,9 @@ export class VideoService {
 
     }
 
-    async getAll(): Promise<Video[]> {
-        return this.prismaService.video.findMany()
-
-
+    async getAll(count = 10, offset = 0): Promise<Video[]> {
+        const video = await this.prismaService.video.findMany({ skip: Number(offset), take: Number(count) })
+        return video;
     }
 
     async getOne(videoID: string) {
@@ -40,6 +41,9 @@ export class VideoService {
 
 
     }
-
+    async search(scan: string): Promise<Video[]> {
+        const videos = await this.prismaService.video.findMany(scan)
+        return videos;
+    }
 
 }
