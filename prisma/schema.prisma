@@ -10,23 +10,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  userID    String   @id @default(uuid())
-  nickName  String   @unique
-  avatar    String?
-  password  String   @unique
-  email     String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  Video        Video?  @relation(fields: [videoVideoID], references: [videoID])
-  videoVideoID String?
-}
-
 model Video {
   videoID     String   @id @default(uuid())
   videoName   String   @unique
-  Description String?
-  url         String
-  author        User[]
+  description String?
   createdAt   DateTime @default(now())
+  picture     String?
+  video       String?
 }

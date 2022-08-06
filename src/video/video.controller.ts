@@ -13,11 +13,11 @@ export class VideoController {
     @Post()
     @UseInterceptors(FileFieldsInterceptor([
         { name: 'picture', maxCount: 1 },
-        { name: 'video', maxCount: 1 },
+        { name: 'Video', maxCount: 1 },
     ]))
-    create(@UploadedFiles() files, @Body() dto: CreateVideoDto,) {
-        const {picture, video} = files
-        return this.videoService.create(dto, picture[0], video[0]);
+    create(@UploadedFiles() files: { picture: Express.Multer.File[], Video: Express.Multer.File[] }, @Body() dto: CreateVideoDto) {
+        const { picture, Video } = files
+        return this.videoService.create(dto, picture[0], Video[0]);
 
     }
     @Get()
