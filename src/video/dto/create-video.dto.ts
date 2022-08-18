@@ -1,7 +1,5 @@
 
 export class CreateVideoDto {
-     videoName: string;
-     description?: string;
-     Picture?
-     video?
+     picture?:Express.Multer.File[]
+     video?:Express.Multer.File[]
 }

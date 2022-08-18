@@ -1,10 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from "@nestjs/common";
 import { Prisma, Video } from "@prisma/client";
-import { find } from "rxjs";
 import { FileService, fileType } from "src/file/file.service";
 import { PrismaService } from "src/prisma.service";
-import { isRegExp } from "util/types";
 import { CreateVideoDto } from "./dto/create-video.dto";
 
 type GetVideosParams = {
@@ -21,12 +19,20 @@ export class VideoService {
     constructor(private prismaService: PrismaService, private fileService: FileService) { }
 
 
-    async create(createVideoDto: CreateVideoDto, picture, Video): Promise<Video> {
-        const picturePath = this.fileService.createFile(fileType.IMAGE, picture);
-        const videoPath = this.fileService.createFile(fileType.VIDEO, Video);
-        const { videoName, description } = createVideoDto
-        const video = await this.prismaService.video.create({ data: { videoName, video: videoPath, description, picture: picturePath } })
-        return video;
+    async create(dto: CreateVideoDto, body: { description: string, videoName: string }) {
+        const { picture, video } = dto;
+        const picturePath = this.fileService.createFile(fileType.IMAGE, picture[0]);
+        const videoPath = this.fileService.createFile(fileType.VIDEO, video[0]);
+        const video_record = this.prismaService.video.create
+            ({
+                data: {
+                    videoName: body.videoName,
+                    description: body.description,
+                    picture: picturePath.fileName,
+                    video: videoPath.fileName
+                }
+            });
+        return video_record;
 
     }
 
@@ -35,15 +41,15 @@ export class VideoService {
         return video;
     }
 
-    async getOne(videoID: string) {
-        return this.prismaService.video.findUnique({ where: { videoID } })
+    async getOne(videoName: string) {
+        return this.prismaService.video.findUnique({ where: { videoName } })
 
 
     }
 
 
-    async delete(videoID: string) {
-        return this.prismaService.video.delete({ where: { videoID } })
+    async delete(videoName: string) {
+        return this.prismaService.video.delete({ where: { videoName } })
 
 
     }

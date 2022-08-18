@@ -15,11 +15,11 @@ export class VideoController {
     @Post()
     @UseInterceptors(FileFieldsInterceptor([
         { name: 'picture', maxCount: 1 },
-        { name: 'Video', maxCount: 1 },
+        { name: 'video', maxCount: 1 },
     ]))
-    create(@UploadedFiles() files: { picture: Express.Multer.File[], Video: Express.Multer.File[] }, @Body() dto: CreateVideoDto) {
-        const { picture, Video } = files
-        return this.videoService.create(dto, picture[0], Video[0]);
+    create(@UploadedFiles() dto: CreateVideoDto, @Body() body: { description: string, videoName: string }) {
+
+        return this.videoService.create(dto, body);
 
     }
     @Get('/search/:searchString')
@@ -42,16 +42,16 @@ export class VideoController {
         @Query('offset') offset: number) {
         return this.videoService.getAll(count, offset)
     }
-    @Get(':videoID')
-    getOne(@Param('videoID') videoID: string) {
-        return this.videoService.getOne(videoID)
+    @Get(':videoName')
+    getOne(@Param('videoName') videoName: string) {
+        return this.videoService.getOne(videoName)
 
 
     }
-    @Delete(':videoID')
-    delete(@Param('videoID') videoID: string) {
+    @Delete(':videoName')
+    delete(@Param('videoName') videoName: string) {
 
-        return this.videoService.delete(videoID);
+        return this.videoService.delete(videoName);
 
     }
 }

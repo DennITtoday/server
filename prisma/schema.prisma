@@ -11,7 +11,6 @@ datasource db {
 }
 
 model Video {
-  videoID     String   @id @default(uuid())
   videoName   String   @unique
   description String?
   createdAt   DateTime @default(now())

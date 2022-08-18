@@ -11,16 +11,17 @@ export class FileService {
 
 
 
-    createFile(type: fileType, file: any): string {
+    createFile(type: fileType, file: any): { filePath: string, fileName: string } {
         try {
             const fileExtension = file.originalname.split('.').pop()
             const fileName = uuid.v4() + '.' + fileExtension
-            const filePath = path.resolve(__dirname, '..', 'static', type)
-            if (!fs.existsSync(filePath)) {
-                fs.mkdirSync(filePath, { recursive: true })
+            const filePlace = path.resolve(__dirname, '../..', 'uploads', type)
+            const filePath = path.resolve(filePlace, fileName)
+            if (!fs.existsSync(filePlace)) {
+                fs.mkdirSync(filePlace, { recursive: true })
             }
-            fs.writeFileSync(path.resolve(filePath, fileName), file.buffer)
-            return type + '/' + fileName
+            fs.writeFileSync(filePath, file.buffer)
+            return { filePath, fileName }
         } catch (e) {
 
             throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR)
