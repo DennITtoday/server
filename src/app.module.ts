@@ -9,7 +9,7 @@ import * as path from 'path'
 
 
     imports: [VideoModule, fileModule, ServeStaticModule.forRoot({
-        rootPath: path.resolve(__dirname, 'static'),
+        rootPath: path.resolve(__dirname, '../uploads'),
     }),]
 
 
