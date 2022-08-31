@@ -36,7 +36,7 @@ export class VideoService {
 
     }
 
-    async getAll(count = 10, offset = 0): Promise<Video[]> {
+    async getAll(count = 50, offset = 0): Promise<Video[]> {
         const video = await this.prismaService.video.findMany({ skip: Number(offset), take: Number(count) })
         return video;
     }
@@ -48,8 +48,8 @@ export class VideoService {
     }
 
 
-    async delete(videoName: string) {
-        return this.prismaService.video.delete({ where: { video: videoName } })
+    async delete(video: string) {
+        return this.prismaService.video.delete({ where: { video: video } })
 
 
     }
