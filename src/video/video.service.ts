@@ -42,14 +42,14 @@ export class VideoService {
     }
 
     async getOne(videoName: string) {
-        return this.prismaService.video.findUnique({ where: { videoName } })
+        return this.prismaService.video.findFirst({ where: { video: { contains: videoName } } })
 
 
     }
 
 
     async delete(videoName: string) {
-        return this.prismaService.video.delete({ where: { videoName } })
+        return this.prismaService.video.delete({ where: { video: videoName } })
 
 
     }

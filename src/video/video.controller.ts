@@ -30,7 +30,7 @@ export class VideoController {
             where: {
                 OR: [
                     {
-                        videoName: { contains: searchString },
+                        video: { contains: searchString },
                     },
                 ],
             },
@@ -42,9 +42,9 @@ export class VideoController {
         @Query('offset') offset: number) {
         return this.videoService.getAll(count, offset)
     }
-    @Get(':videoName')
-    getOne(@Param('videoName') videoName: string) {
-        return this.videoService.getOne(videoName)
+    @Get(':video')
+    getOne(@Param('video') video: string) {
+        return this.videoService.getOne(video)
 
 
     }

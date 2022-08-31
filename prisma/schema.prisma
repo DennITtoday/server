@@ -11,9 +11,9 @@ datasource db {
 }
 
 model Video {
-  videoName   String   @unique
+  video       String @unique
+  videoName   String   
   description String?
   createdAt   DateTime @default(now())
   picture     String?
-  video       String?
 }
